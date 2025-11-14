@@ -9,6 +9,7 @@ export interface Particle {
   vx: number;
   vy: number;
   color: string;
+  depth: number;
 }
 
 export interface MousePosition {

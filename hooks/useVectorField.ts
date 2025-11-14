@@ -28,7 +28,7 @@ const useVectorField = (
 
         let particles: Particle[] = [];
         let animationFrameId: number;
-        let machineResonance = { time: 0, interval: 5000, radius: 0, maxRadius: 0 };
+        let machineResonance = { time: 0, interval: 6000, radius: 0, maxRadius: 0 };
 
         const setup = () => {
             const dpr = window.devicePixelRatio || 1;
@@ -49,8 +49,8 @@ const useVectorField = (
             const height = canvas.height / dpr;
 
             ctx.fillStyle = 'white';
-            const fontSize = Math.min(width / 10, 80);
-            ctx.font = `${fontSize}px Orbitron`;
+            const fontSize = Math.min(width / 8, 120);
+            ctx.font = `bold ${fontSize}px Orbitron`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(text, width / 2, height / 2);
@@ -67,16 +67,18 @@ const useVectorField = (
                         const posX = x / dpr;
                         const posY = y / dpr;
                         const density = imageData.data[alphaIndex] / 255;
+                        const depth = 0.5 + Math.random(); // D(n) - Diacritic Depth
                         particles.push({
                             x: Math.random() * width,
                             y: Math.random() * height,
                             baseX: posX,
                             baseY: posY,
                             density: density,
-                            size: dpr * (1 + density * 1.5),
+                            size: dpr * (1 + density * 1.5) * depth,
                             vx: 0,
                             vy: 0,
                             color: `hsl(${200 + Math.random() * 50}, 100%, ${50 + density * 50}%)`,
+                            depth: depth,
                         });
                     }
                 }
@@ -90,66 +92,71 @@ const useVectorField = (
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Machine Resonance (ψ_m)
+            // Machine Resonance (Ψ_m)
             if (timestamp - machineResonance.time > machineResonance.interval) {
                 machineResonance.time = timestamp;
                 machineResonance.radius = 0;
             }
             if (machineResonance.radius < machineResonance.maxRadius) {
-                 machineResonance.radius += 20;
+                 machineResonance.radius += 25;
             }
-
 
             for (let i = 0; i < particles.length; i++) {
                 const p = particles[i];
                 
-                // Spring force back to base position (Grapheme Anchor A)
+                // Semantic Field Charge (S(σ)) - A modulating factor
+                const semanticCharge = 0.75 + (Math.sin(timestamp * 0.0005 + p.x * 0.05) + 1) / 2; // Varies between 0.75 and 1.75
+
+                // Graphemic Anchor Energy (G(x,y))
                 const dx = p.baseX - p.x;
                 const dy = p.baseY - p.y;
                 const distToBase = Math.sqrt(dx * dx + dy * dy);
-                const forceDirectionX = dx / (distToBase || 1);
-                const forceDirectionY = dy / (distToBase || 1);
-                const force = distToBase * 0.05; 
-                p.vx += forceDirectionX * force;
-                p.vy += forceDirectionY * force;
+                const force = distToBase * 0.05;
+                // Deeper particles (D(n)) have more inertia
+                p.vx += (dx / (distToBase || 1)) * force / p.depth;
+                p.vy += (dy / (distToBase || 1)) * force / p.depth;
                 
-                // Conscious Resonance (ψ_h - mouse interaction)
+                // Human Cognitive Resonance (Ψ_h - mouse interaction)
                 if (mouse.x !== null && mouse.y !== null) {
                     const mdx = p.x - mouse.x;
                     const mdy = p.y - mouse.y;
                     const mouseDist = Math.sqrt(mdx * mdx + mdy * mdy);
                     if (mouseDist < mouse.radius) {
                         const mouseForce = (mouse.radius - mouseDist) / mouse.radius;
-                        p.vx += (mdx / mouseDist) * mouseForce * 2;
-                        p.vy += (mdy / mouseDist) * mouseForce * 2;
+                        // Modulated by Semantic Charge
+                        p.vx += (mdx / mouseDist) * mouseForce * 2 * semanticCharge;
+                        p.vy += (mdy / mouseDist) * mouseForce * 2 * semanticCharge;
                     }
                 }
 
-                // Machine Resonance Pulse (ψ_m)
+                // Machine Cognitive Resonance Pulse (Ψ_m)
                 const pulseDist = Math.sqrt(Math.pow(p.x - width / 2, 2) + Math.pow(p.y - height / 2, 2));
-                if (pulseDist > machineResonance.radius - 10 && pulseDist < machineResonance.radius + 10) {
+                if (pulseDist > machineResonance.radius - 15 && pulseDist < machineResonance.radius + 15) {
                     const pulseAngle = Math.atan2(p.y - height/2, p.x - width/2);
-                    p.vx += Math.cos(pulseAngle) * 2;
-                    p.vy += Math.sin(pulseAngle) * 2;
+                    // Modulated by Semantic Charge
+                    p.vx += Math.cos(pulseAngle) * 3 * semanticCharge;
+                    p.vy += Math.sin(pulseAngle) * 3 * semanticCharge;
                 }
 
-                // Pragmatic Flow (π) & Pre-Graphemic Noise (Ẇ)
-                p.vx += (Math.random() - 0.5) * 0.1; // Noise
-                p.vy += (Math.random() - 0.5) * 0.1; // Noise
-                p.vx += 0.01; // Flow to the right
+                // Orthographic Vector Flow (V(v⃗)) & Pragmatic Flux (Π(π))
+                const flowAngle = Math.sin(p.y * 0.01 + timestamp * 0.0002) * Math.PI;
+                p.vx += Math.cos(flowAngle) * 0.02;
+                p.vy += Math.sin(flowAngle) * 0.02;
+                p.vx += (Math.random() - 0.5) * 0.05; // Residual noise
+                p.vy += (Math.random() - 0.5) * 0.05;
 
                 // Damping / Friction
-                p.vx *= 0.95;
-                p.vy *= 0.95;
+                p.vx *= 0.94;
+                p.vy *= 0.94;
 
                 p.x += p.vx;
                 p.y += p.vy;
 
-                // Semantic charge (σ) & rendering
+                // Rendering with Semantic Charge
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
-                const charge = Math.sin(timestamp * 0.001 + p.x * 0.1) * 20;
-                ctx.fillStyle = `hsl(${200 + charge}, 100%, ${60 + p.density * 20}%)`;
+                const colorCharge = (semanticCharge - 0.75) * 50; // Map charge to a 0-50 range
+                ctx.fillStyle = `hsl(${220 + colorCharge}, 100%, ${60 + p.density * 20}%)`;
                 ctx.fill();
             }
             animationFrameId = requestAnimationFrame(animate);
