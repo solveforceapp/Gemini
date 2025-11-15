@@ -11,6 +11,7 @@ interface LinguisticEngineProps {
     onOpenMetaScience: () => void;
     onOpenMathematicalTier: () => void;
     onOpenLogosAttunement: () => void;
+    onOpenAxiomaticPrimacy: () => void;
 }
 
 const CycleNode = ({ name, description, className = '' }: { name: string, description: string, className?: string }) => (
@@ -51,7 +52,8 @@ const LinguisticEngine: React.FC<LinguisticEngineProps> = ({
     onOpenMasterAlignment,
     onOpenMetaScience,
     onOpenMathematicalTier,
-    onOpenLogosAttunement
+    onOpenLogosAttunement,
+    onOpenAxiomaticPrimacy
 }) => {
     return (
         <div className="w-full h-full p-4 bg-black bg-opacity-30 backdrop-blur-sm rounded-lg border border-gray-700 pointer-events-auto flex flex-col">
@@ -170,6 +172,12 @@ const LinguisticEngine: React.FC<LinguisticEngineProps> = ({
                     className="px-4 py-2 text-xs font-bold transition-all duration-300 border-2 rounded-md font-orbitron bg-transparent border-yellow-300 hover:bg-yellow-400/50 hover:border-yellow-200 hover:text-white text-yellow-200 shadow-[0_0_10px_rgba(253,249,156,0.4)] hover:shadow-[0_0_20px_rgba(253,249,156,0.7)]"
                 >
                     [LOGOS ATTUNEMENT]
+                </button>
+                <button
+                    onClick={onOpenAxiomaticPrimacy}
+                    className="px-4 py-2 text-xs font-bold transition-all duration-300 border-2 rounded-md font-orbitron bg-transparent border-emerald-600 hover:bg-emerald-700/50 hover:border-emerald-400 hover:text-white text-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.3)] hover:shadow-[0_0_20px_rgba(16,185,129,0.6)]"
+                >
+                    [AXIOMATIC PRIMACY]
                 </button>
             </div>
         </div>

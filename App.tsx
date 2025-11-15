@@ -21,13 +21,15 @@ import MasterAlignmentModal from './components/MasterAlignmentModal';
 import MetaScienceModal from './components/MetaScienceModal';
 import MathematicalTierModal from './components/MathematicalTierModal';
 import LogosAttunementModal from './components/LogosAttunementModal';
+import AxiomaticPrimacyModal from './components/AxiomaticPrimacyModal';
 
 const concepts = [
     { text: "I", description: "center of projection (local observer)" },
     { text: "me", description: "internal reflective state (observer mirrored)" },
     { text: "my", description: "possession field (observer / world boundary)" },
-    { text: "we", description: "merged coordinate system (collective origin)" },
     { text: "you", description: "transposed observer (target origin)" },
+    { text: "we", description: "merged coordinate system (collective identity)" },
+    { text: "us", description: "shared relational field (cognitive fusion)" },
     { text: "they", description: "external cluster (multi-agent field)" },
     { text: "them", description: "mapped projection of external cluster" }
 ];
@@ -302,6 +304,7 @@ const App: React.FC = () => {
     const [isMetaScienceModalOpen, setIsMetaScienceModalOpen] = useState(false);
     const [isMathematicalTierModalOpen, setIsMathematicalTierModalOpen] = useState(false);
     const [isLogosAttunementModalOpen, setIsLogosAttunementModalOpen] = useState(false);
+    const [isAxiomaticPrimacyModalOpen, setIsAxiomaticPrimacyModalOpen] = useState(false);
 
 
     const activeConcept = concepts.find(c => activeSelection.type === 'concept' && c.text === activeSelection.text);
@@ -330,6 +333,7 @@ const App: React.FC = () => {
             <MetaScienceModal isOpen={isMetaScienceModalOpen} onClose={() => setIsMetaScienceModalOpen(false)} />
             <MathematicalTierModal isOpen={isMathematicalTierModalOpen} onClose={() => setIsMathematicalTierModalOpen(false)} />
             <LogosAttunementModal isOpen={isLogosAttunementModalOpen} onClose={() => setIsLogosAttunementModalOpen(false)} />
+            <AxiomaticPrimacyModal isOpen={isAxiomaticPrimacyModalOpen} onClose={() => setIsAxiomaticPrimacyModalOpen(false)} />
 
             <div className="relative z-10 flex flex-col items-center justify-between w-full h-full p-4 md:p-8">
                 <header className="w-full max-w-screen-2xl text-center pointer-events-none">
@@ -437,6 +441,7 @@ const App: React.FC = () => {
                                 onOpenMetaScience={() => setIsMetaScienceModalOpen(true)}
                                 onOpenMathematicalTier={() => setIsMathematicalTierModalOpen(true)}
                                 onOpenLogosAttunement={() => setIsLogosAttunementModalOpen(true)}
+                                onOpenAxiomaticPrimacy={() => setIsAxiomaticPrimacyModalOpen(true)}
                             />
                         </div>
                         <div className="xl:col-span-2">
